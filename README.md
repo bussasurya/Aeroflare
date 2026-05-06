@@ -3,7 +3,7 @@
 
 > **Built during CMR HACKFEST 3.0 (36-Hour National Level Hackathon) | Track: Disaster Management**
 
-AeroFlare is a high-performance, real-time geospatial command center designed to shift disaster management from *reactive* reporting to *predictive* intelligence. By synthesizing live satellite telemetry, wind vectors, and topographical data, AeroFlare simulates and visualizes the future spread of wildfires, giving first responders a critical head start.
+AeroFlare is a high-performance,3D real-time geospatial command center designed to shift disaster management from *reactive* reporting to *predictive* intelligence. By synthesizing live satellite telemetry, wind vectors, and topographical data, AeroFlare simulates and visualizes the future spread of wildfires, giving first responders a critical head start.
 
 ## 🚀 The Problem & Our Solution
 Existing disaster management tools tell you where a fire *is*. **AeroFlare tells you where it will be in 1, 3, and 6 hours.** During a wildfire, local computing bottlenecks and static data can cost lives. We engineered a dual-mode (3D/2D) simulation engine that bridges the gap between raw global satellite feeds and on-ground actionable intelligence. 
