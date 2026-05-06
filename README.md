@@ -44,7 +44,4 @@ Existing disaster management tools tell you where a fire *is*. **AeroFlare tells
 * Python 3.8+
 * OpenWeatherMap API Key
 
-### 1. Clone the Repository
-```bash
-git clone [https://github.com/yourusername/aeroflare.git](https://github.com/yourusername/aeroflare.git)
-cd aeroflare
+
