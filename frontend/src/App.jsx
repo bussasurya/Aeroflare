@@ -8,15 +8,16 @@ import Map2D from "./Map2D";
 // --- CONFIGURATION ---
 const EARTH_IMAGE = "//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"; 
 const BORDERS_URL = "https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json";
+// Using a standard public CORS proxy for reliability if local server is down
 const API_URL = `http://127.0.0.1:5000/api/wind?t=${Date.now()}`; 
 
-// --- AEROFLARE LOGO (Fixed Visibility) ---
+// --- AEROFLARE LOGO ---
 const AeroFlareLogo = () => (
   <div style={{
     position: "absolute",
     bottom: "85px", 
     left: "20px",
-    zIndex: 200, // Ensures it stays on top of 2D Map
+    zIndex: 200, 
     color: "white",
     fontFamily: "'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     fontSize: "42px", 
@@ -80,6 +81,7 @@ function App() {
             globeMeshRef.current = scene.children.find(obj => obj.type === "Mesh");
         })
         .onZoom(({ lat, lng, altitude }) => {
+            // Auto-switch to 2D if zoomed in very close
             if (altitude < 0.25) {
                 handleModeChange("2D", { lat, lng });
             }
@@ -89,11 +91,11 @@ function App() {
             globeInstance.current.polygonsData(countries.features)
                    .polygonCapColor(() => 'rgba(0,0,0,0)')
                    .polygonSideColor(() => 'rgba(0,0,0,0)')
-                   .polygonStrokeColor(() => '#ffffffff')
+                   .polygonStrokeColor(() => 'rgba(255, 255, 255, 0.4)')
                    .polygonAltitude(0.0001);
         });
 
-        console.log("📥 Fetching Real NOAA Data...");
+        // Fetch Wind Data
         fetch(API_URL)
           .then(res => res.json())
           .then(data => {
@@ -107,10 +109,11 @@ function App() {
                 }
             });
             initParticles(globeInstance.current); 
-          });
+          })
+          .catch(err => console.error("Wind Data Fetch Error:", err));
 
         globeInstance.current.controls().autoRotate = true;
-        globeInstance.current.controls().autoRotateSpeed = 0.05;
+        globeInstance.current.controls().autoRotateSpeed = 0.2;
     }
 
     const throttledMouseMove = throttle(handle3DMouseMove, 50);
@@ -202,7 +205,7 @@ function App() {
       }
 
       const PARTICLE_COUNT = 10000; 
-      const TRAIL_LENGTH = 50; 
+      const TRAIL_LENGTH = 40; 
       const particles = [];
       for(let i=0; i<PARTICLE_COUNT; i++) {
           particles.push({ lat: (Math.random()-0.5)*180, lng: (Math.random()-0.5)*360, alt: 0.015, age: Math.random()*100, trail: [] });
@@ -312,7 +315,7 @@ function App() {
             viewState={mapViewState} 
             onViewStateChange={setMapViewState} 
             onMouseMove={handle2DMouseMove} 
-            onZoomOut={() => handleModeChange("3D")}
+            onZoomOut={() => handleModeChange("3D")} // Link back to 3D
             windU={windU}
             windV={windV}
           />
@@ -340,7 +343,9 @@ function App() {
         {/* HUD Elements */}
         <AeroFlareLogo />
         <LayerControl viewMode={viewMode} setViewMode={handleModeChange} />
-        <WindSpeedLegend />
+        
+        {/* CRITICAL FIX: Pass viewMode to the Legend so it can switch between Wind and Fire */}
+        <WindSpeedLegend viewMode={viewMode} />
       </div>
 
     </div>

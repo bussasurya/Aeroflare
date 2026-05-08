@@ -16,6 +16,7 @@
     "deck.gl": "^9.2.5",
     "globe.gl": "^2.45.0",
     "maplibre-gl": "^5.15.0",
+    "papaparse": "^5.5.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-map-gl": "^8.1.0",
